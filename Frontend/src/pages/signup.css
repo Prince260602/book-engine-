@@ -1,0 +1,95 @@
+.login-overall-container {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f2f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.signup-container {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 400px;
+}
+
+.signup-header {
+  background-color: #76b947; /* Facebook blue */
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.signup-form {
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-group button {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.form-group input[type="submit"] {
+  background-color: #76b947; /* Facebook green */
+  color: #fff;
+  cursor: pointer;
+}
+
+.form-group input[type="submit"]:hover {
+  background-color: #2f5233;
+}
+
+.login-link {
+  text-align: center;
+}
+
+.login-link a {
+  color: #76b947; /* Facebook blue */
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.login-link a:hover {
+  color: #2f5233; /* Facebook blue */
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.spinner {
+  border: 1px solid black;
+  border-top-color: #76b947;
+  border-left-color: #76b947;
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
