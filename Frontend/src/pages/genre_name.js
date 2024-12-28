@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../components/spinner";
@@ -13,35 +13,50 @@ function MyComponent() {
   console.log(location);
   const genre_name = location.state.name;
   // const api_genre="/get_genre_name/funny"
+  // const getData = async () => {
+  //   const response = await databaseapi.get(`/get_genre_name/${genre_name}`);
+  //   // const response1 = await fetch('http://127.0.0.1:8000/get_genre_name/funny');
+  //   // const resp = await response.json();
+  //   // const response="sample"
+  //   console.log("response ", response);
+  //   console.log("response.data==", response.data.ebook_titles);
+  //   // parse response to create an array
+  //   let resp = response.data.ebook_titles;
+  //   console.log("type = ", typeof resp);
+  //   // respParse=JSON.parse("[" +response.data.ebook_titles+ "]");
+  //   // respParse = JSON.parse(response.data.ebook_titles);
+  //   var myArr = String(resp)
+  //     .split()
+  //     .map((resp) => {
+  //       return String(resp);
+  //     });
+  //   console.log("array= ", myArr);
+  //   let respArr = resp.split("\n");
+  //   respArr = respArr
+  //     .filter((item) => item.trim() !== "")
+  //     .map((item) => item.replace(/^\d+\.\s*"([^"]*)"\s*$/, "$1").trim());
+  //   console.log("respArr  = ", respArr);
+  //   setNames(respArr);
+  //   // var newArray = [response.data[0]]
+  //   // console.log("array = ",{newArray})
+  //   // setNames(newArray);
+  //   setLoading(false);
+  // };
+  const [data, setData] = useState([]);
+
   const getData = async () => {
-    const response = await databaseapi.get(`/get_genre_name/${genre_name}`);
-    // const response1 = await fetch('http://127.0.0.1:8000/get_genre_name/funny');
-    // const resp = await response.json();
-    // const response="sample"
-    console.log("response ", response);
-    console.log("response.data==", response.data.ebook_titles);
-    // parse response to create an array
-    let resp = response.data.ebook_titles;
-    console.log("type = ", typeof resp);
-    // respParse=JSON.parse("[" +response.data.ebook_titles+ "]");
-    // respParse = JSON.parse(response.data.ebook_titles);
-    var myArr = String(resp)
-      .split()
-      .map((resp) => {
-        return String(resp);
-      });
-    console.log("array= ", myArr);
-    let respArr = resp.split("\n");
-    respArr = respArr
-      .filter((item) => item.trim() !== "")
-      .map((item) => item.replace(/^\d+\.\s*"([^"]*)"\s*$/, "$1").trim());
-    console.log("respArr  = ", respArr);
-    setNames(respArr);
-    // var newArray = [response.data[0]]
-    // console.log("array = ",{newArray})
-    // setNames(newArray);
-    setLoading(false);
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/get_genre_name/${genre_name}`);
+      if (response && response.data) {
+        setData(response.data.ebook_titles);  // Assuming data contains ebook_titles
+      } else {
+        console.error("No data found.");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
+  
 
   useEffect(() => {
     // Need to call API here and get the names from the backend;
@@ -61,7 +76,7 @@ function MyComponent() {
     //   "A roadway to Mars 4",
     //   "A roadway to Mars 5",
     // ]);
-  }, []);
+  }, [genre_name]);
 
   const navigate = useNavigate();
 

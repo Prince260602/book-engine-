@@ -79,7 +79,7 @@ function Output() {
   }, [chapterList, completeChapterListProcessing, rawData]);
 
   const getData = async () => {
-    const resp = await databaseapi.put("/gen_chapters", {
+    const resp = await databaseapi.get("/gen_chapters", {
       ebook_name: location.state.name,
       chap_nos: location.state.chapterNumber,
       subno: location.state.subsectionNumber,

@@ -20,7 +20,7 @@ function Content(props) {
       chap_nos: location.state.chapterNumber,
       subno: location.state.subsectionNumber,
     };
-    const response = await databaseapi.put("/get_content", reqData);
+    const response = await databaseapi.get("/get_content", reqData);
     console.log("contents resp = ", response.data.contents);
     setTableData(response.data.contents);
     setLoading(false);
