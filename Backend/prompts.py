@@ -1,24 +1,13 @@
-import openai
-import re
-from dotenv import load_dotenv
-import os
+from gemini_api import initialize_gemini
 
-# Load the treasure map
-load_dotenv()
+# Function to interact with the Gemini API
+def get_completion(prompt):
+    model = initialize_gemini()
+    response = model.generate_content(prompt)
+    print("response from gemini: prompts", response.text)
+    return response.text
 
-# Read the clues (environment variables)
-model = os.getenv("GPT_MODEL")
-openai.api_key  = os.getenv("API_KEY")
-
-
-def get_completion(prompt, model='gpt-3.5-turbo'):
-    messages = [{"role": "user", "content": prompt}]
-    response = openai.ChatCompletion.create(
-        model=model,
-        messages=messages,
-        temperature=0, # this is the degree of randomness of the model's output
-        
-    )
-    
-    res=response.choices[0].message["content"]
-    return response.choices[0].message["content"]
+# Example usage
+# prompt = "Generate 5 unique ebook titles for science fiction"
+# titles = get_completion(prompt)
+# print(titles)
