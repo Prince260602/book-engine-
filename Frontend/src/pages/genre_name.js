@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -6,18 +5,18 @@ import Spinner from "../components/spinner";
 import { auth } from "../firebase";
 
 function MyComponent() {
-  const [selectedtitle, setSelectedtitle] = useState("");
+  const [selectedTitle, setSelectedTitle] = useState("");
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]); // Data will hold titles
+  const [data, setData] = useState([]); 
   const location = useLocation();
   const navigate = useNavigate();
-  const genre_name = location.state?.name || "";
+  const genreName = location.state?.name || "";
 
   const getData = async () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://127.0.0.1:8000/get_genre_name/${genre_name}`
+        `http://127.0.0.1:8000/get_genre_name/${genreName}`
       );
       console.log("API response:", response.data);
 
@@ -55,34 +54,52 @@ function MyComponent() {
     } else {
       getData();
     }
-  }, [genre_name]);
+  }, [genreName]);
 
   const onSubmit = () => {
-    if (!selectedtitle) {
-      alert("Please select a card!");
+    if (!selectedTitle) {
+      alert("Please select a title!");
     } else {
-      navigate("/chap", { state: { name: selectedtitle } });
+      navigate("/chap", { state: { name: selectedTitle } });
     }
   };
 
   return (
     <div className="container">
-      <h1 className="title">Select Your Favorite Name</h1>
+      <h1 className="title">Select Your Favorite Title</h1>
       {loading ? (
         <Spinner />
       ) : (
-        <div className="cards-container">
-          {/* Render one card per title */}
+        <div className="table-container">
           {Array.isArray(data) && data.length > 0 ? (
-            data.map((title, index) => (
-              <div
-                key={index}
-                className={`card ${selectedtitle === title ? "selected" : ""}`}
-                onClick={() => setSelectedtitle(title)}
-              >
-                <h2>{title}</h2>
-              </div>
-            ))
+            <table>
+              <thead>
+                <tr>
+                  <th>Number</th>
+                  <th>Title</th>
+                  <th>Select</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((title, index) => (
+                  <tr
+                    key={index}
+                    className={selectedTitle === title ? "selected" : ""}
+                    onClick={() => setSelectedTitle(title)}
+                  >
+                    <td>{index + 1}</td>
+                    <td>{title}</td>
+                    <td>
+                      {selectedTitle === title ? (
+                        <span>Selected</span>
+                      ) : (
+                        <button>Choose</button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           ) : (
             <p>No titles available.</p>
           )}
@@ -92,60 +109,55 @@ function MyComponent() {
         Let’s select chapters
       </button>
       <style jsx>{`
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Centers children horizontally */
-    justify-content: center; /* Centers children vertically */
-    width: 80%;
-    text-align: center;
-    padding: 20px;
-    margin: 0 auto; /* Centers the container on the page */
-  }
-  .title {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  .cards-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 20px;
-    width: 100%; /* Ensures the grid stretches within the container */
-    justify-content: center; /* Centers grid items */
-    margin-bottom: 20px;
-  }
-  .card {
-    width: 80%;
-    margin-left: 10%;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #fff;
-    cursor: pointer;
-    transition: transform 0.3s, background-color 0.3s;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: center; /* Centers card content */
-  }
-  .card:hover {
-    transform: scale(1.03);
-    background-color: #f0f8ff;
-  }
-  .card.selected {
-    background-color: #2f5233;
-    color: #d4ffd9;
-    transform: scale(1.05);
-  }
-  .submit-button {
-    padding: 10px 20px;
-    background-color: #76b947;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 20px; /* Adds space between cards and button */
-  }
-`}</style>
-
+        .container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          width: 80%;
+          text-align: center;
+          padding: 20px;
+          margin: 0 auto;
+        }
+        .title {
+          font-size: 24px;
+          margin-bottom: 20px;
+        }
+        .table-container {
+          width: 100%;
+          margin-bottom: 20px;
+          overflow-x: auto;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 20px;
+        }
+        th,
+        td {
+          padding: 10px;
+          text-align: center;
+          border: 1px solid #ccc;
+        }
+        tr:hover {
+          background-color: #f0f8ff;
+        }
+        tr.selected {
+          background-color: #2f5233;
+          color: #d4ffd9;
+        }
+        button {
+          padding: 8px 16px;
+          background-color: #76b947;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+        .submit-button {
+          margin-top: 20px;
+        }
+      `}</style>
     </div>
   );
 }

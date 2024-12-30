@@ -10,9 +10,8 @@ function Content(props) {
 
   const [tableHeaders, setTableHeaders] = useState(["S.No", "Chapter List"]);
   const [tableData, setTableData] = useState([]);
-  const [chaptersData, setChaptersData] = useState([]); 
+  const [chaptersData, setChaptersData] = useState([]);
   const [loading, setLoading] = useState(true);
-
 
   const getData = async () => {
     try {
@@ -26,9 +25,12 @@ function Content(props) {
 
       if (Array.isArray(response.data.contents)) {
         setTableData(response.data.contents);
+      } else if (typeof response.data.contents === "string") {
+        setTableData([[1, "chapter", response.data.contents]]); // Wrap in an array
+        console.warn("Received string, wrapping as array.");
       } else {
         console.error(
-          "Expected an array, but received:",
+          "Expected an array but received:",
           response.data.contents
         );
         setTableData([]);
@@ -52,9 +54,12 @@ function Content(props) {
 
       if (Array.isArray(response.data.chapters)) {
         setChaptersData(response.data.chapters);
+      } else if (typeof response.data.chapters === "string") {
+        setChaptersData([response.data.chapters]); // Wrap in an array
+        console.warn("Received string, wrapping as array.");
       } else {
         console.error(
-          "Expected an array, but received:",
+          "Expected an array but received:",
           response.data.chapters
         );
         setChaptersData([]);
@@ -145,10 +150,10 @@ function Content(props) {
               </tr>
             </thead>
             <tbody className="table-body">
-              {tableData.map((data, index) => {
-                return (
+              {tableData.length > 0 ? (
+                tableData.map((data, index) => (
                   <tr key={index} className="table-row">
-                    <td className="table-row-sno">{data[0]}</td>
+                    <td className="table-row-sno">{data[0] || index + 1}</td>
                     <td
                       className={
                         data[1] === "chapter"
@@ -156,11 +161,17 @@ function Content(props) {
                           : "table-row-subsection"
                       }
                     >
-                      {data[2]}
+                      {data[2] || data}
                     </td>
                   </tr>
-                );
-              })}
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="2" className="table-empty-row">
+                    No content available.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         )}
