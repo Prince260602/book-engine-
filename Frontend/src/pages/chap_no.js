@@ -86,6 +86,7 @@ function Chapnos() {
         .div {
           display: flex;
           flex-direction: column;
+          align-items: center;
           padding-top: 3%;
           padding-left: 3%;
           padding-right: 3%;
@@ -214,6 +215,7 @@ function Chapnos() {
         }
         .div-9::placeholder {
           color: #404040;
+          font-size: 1.5rem;
         }
         @media {
           .div-8 {
@@ -227,7 +229,7 @@ function Chapnos() {
           align-self: center;
           display: flex;
           margin-top: 100px;
-          width: 100%;
+          width: 80%;
           max-width: 1589px;
           align-items: flex-start;
           justify-content: space-between;
@@ -482,8 +484,7 @@ function Chapnos() {
         }
         .div-23 {
           display: flex;
-          width: 607px;
-          max-width: 100%;
+          width: 50%;
           align-items: center;
           justify-content: center;
           height: 65px;

@@ -2,7 +2,6 @@ from prompts import get_completion
 from chapters import generate_chapters
 import logging
 
-# Initialize logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -19,11 +18,9 @@ def generate_content(name, chno, subno):
         str: A list of contents generated for the eBook.
     """
     try:
-        # Formulate the prompt
         prompt = f"Please generate the list of contents of {name}, containing {chno} chapters, each having {subno} subsections."
         logger.info(f"Prompt generated: {prompt}")
 
-        # Get completion from the model
         response = get_completion(prompt)
         logger.info("Generated table of contents successfully.")
         return response
@@ -33,7 +30,6 @@ def generate_content(name, chno, subno):
         return None
 
 if __name__ == "__main__":
-    # Example usage
     ebook_name = "Whispers in the Shadows"
     chapter_count = 3
     subsection_count = 2
@@ -44,7 +40,6 @@ if __name__ == "__main__":
         logger.info("Generated Content List:")
         print(content_list)
 
-    # Optionally, generate full chapter content based on the table of contents
     chapters = generate_chapters(ebook_name, chapter_count, subsection_count)
     logger.info("Generated Chapter Content:")
     for chapter in chapters:

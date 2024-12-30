@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 import { useLocation, useNavigate } from "react-router-dom";
 import Spinner from "../components/spinner";
 import databaseapi from "../api/databaseapi";
@@ -11,44 +10,71 @@ function Content(props) {
 
   const [tableHeaders, setTableHeaders] = useState(["S.No", "Chapter List"]);
   const [tableData, setTableData] = useState([]);
+  const [chaptersData, setChaptersData] = useState([]); 
   const [loading, setLoading] = useState(true);
 
-  //api function
+
   const getData = async () => {
-    const reqData = {
-      ebook_name: location.state.name,
-      chap_nos: location.state.chapterNumber,
-      subno: location.state.subsectionNumber,
-    };
-    const response = await databaseapi.get("/get_content", reqData);
-    console.log("contents resp = ", response.data.contents);
-    setTableData(response.data.contents);
-    setLoading(false);
-    return;
+    try {
+      const reqData = {
+        ebook_name: location.state.name,
+        chap_nos: location.state.chapterNumber,
+        subno: location.state.subsectionNumber,
+      };
+      const response = await databaseapi.post("/get_content", reqData);
+      console.log("contents resp = ", response.data.contents);
+
+      if (Array.isArray(response.data.contents)) {
+        setTableData(response.data.contents);
+      } else {
+        console.error(
+          "Expected an array, but received:",
+          response.data.contents
+        );
+        setTableData([]);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching content:", error);
+      setLoading(false);
+    }
+  };
+
+  const getChaptersData = async () => {
+    try {
+      const reqData = {
+        ebook_name: location.state.name,
+        chap_nos: location.state.chapterNumber,
+        subno: location.state.subsectionNumber,
+      };
+      const response = await databaseapi.post("/gen_chapters", reqData);
+      console.log("chapters resp = ", response.data.chapters);
+
+      if (Array.isArray(response.data.chapters)) {
+        setChaptersData(response.data.chapters);
+      } else {
+        console.error(
+          "Expected an array, but received:",
+          response.data.chapters
+        );
+        setChaptersData([]);
+      }
+    } catch (error) {
+      console.error("Error fetching chapters data:", error);
+    }
   };
 
   useEffect(() => {
-    // Load Data from backend here
     setTimeout(() => {
       if (!auth.currentUser) {
         alert("You are not logged in. Please login");
         navigate("/login");
       } else {
         getData();
+        getChaptersData();
       }
     }, 2000);
     setLoading(true);
-
-    // setTableData([
-    //   [1, "chapter", "Chapter 1"],
-    //   [2, "subsection", "Subsection 1"],
-    //   [3, "subsection", "Subsection 2"],
-    //   [4, "subsection", "Subsection 3"],
-    //   [5, "chapter", "Chapter 2"],
-    //   [6, "subsection", "Subsection 1"],
-    //   [7, "subsection", "Subsection 2"],
-    //   [8, "subsection", "Subsection 3"],
-    // ]);
   }, []);
 
   const onSubmit = () => {
@@ -111,13 +137,17 @@ function Content(props) {
         ) : (
           <table className="table">
             <thead className="table-headers">
-              <th className="table-sno-header">{tableHeaders[0]}</th>
-              <th className="table-chapter-header">{tableHeaders[1]}</th>
+              <tr>
+                {" "}
+                {/* Added <tr> around <th> */}
+                <th className="table-sno-header">{tableHeaders[0]}</th>
+                <th className="table-chapter-header">{tableHeaders[1]}</th>
+              </tr>
             </thead>
             <tbody className="table-body">
-              {tableData.map((data) => {
+              {tableData.map((data, index) => {
                 return (
-                  <tr className="table-row">
+                  <tr key={index} className="table-row">
                     <td className="table-row-sno">{data[0]}</td>
                     <td
                       className={
