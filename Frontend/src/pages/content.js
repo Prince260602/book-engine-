@@ -21,7 +21,7 @@ function Content(props) {
         subno: location.state.subsectionNumber,
       };
       const response = await databaseapi.post("/get_content", reqData);
-      console.log("contents resp = ", response.data.contents);
+      console.log("contents resp", response.data.contents);
 
       if (Array.isArray(response.data.contents)) {
         setTableData(response.data.contents);
@@ -50,7 +50,7 @@ function Content(props) {
         subno: location.state.subsectionNumber,
       };
       const response = await databaseapi.post("/gen_chapters", reqData);
-      console.log("chapters resp = ", response.data.chapters);
+      // console.log("chapters resp = ", response.data.chapters);
 
       if (Array.isArray(response.data.chapters)) {
         setChaptersData(response.data.chapters);

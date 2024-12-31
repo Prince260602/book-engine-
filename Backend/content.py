@@ -1,6 +1,6 @@
 from prompts import get_completion
 from chapters import generate_chapters
-import logging
+import logging, json
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

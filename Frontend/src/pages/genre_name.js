@@ -64,6 +64,8 @@ function MyComponent() {
     }
   };
 
+  console.log("data", data.join("").trim("").split("\n"));
+
   return (
     <div className="container">
       <h1 className="title">Select Your Favorite Title</h1>
@@ -81,19 +83,19 @@ function MyComponent() {
                 </tr>
               </thead>
               <tbody>
-                {data.map((title, index) => (
+                {data.join("").trim("").split("\n").map((title, index) => (
                   <tr
                     key={index}
                     className={selectedTitle === title ? "selected" : ""}
                     onClick={() => setSelectedTitle(title)}
                   >
                     <td>{index + 1}</td>
-                    <td>{title}</td>
+                    <td>{title.replace(/^\d+\.\s*/, '')}</td>
                     <td>
                       {selectedTitle === title ? (
                         <span>Selected</span>
                       ) : (
-                        <button>Choose</button>
+                        <span className="choose-btn">Choose</span>
                       )}
                     </td>
                   </tr>
@@ -146,7 +148,7 @@ function MyComponent() {
           background-color: #2f5233;
           color: #d4ffd9;
         }
-        button {
+        .choose-btn {
           padding: 8px 16px;
           background-color: #76b947;
           color: white;
