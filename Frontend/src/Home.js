@@ -1,8 +1,12 @@
 
-import "./App.css";
+import "./Home.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../src/firebase";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { auth } from "./firebase";
+import { faSignOut } from "@fortawesome/free-solid-svg-icons";
+import { signOut } from "firebase/auth";
 
 const GenreButton = ({ genre, selectedGenre, onClick }) => {
   const isSelected = selectedGenre === genre;
@@ -16,7 +20,7 @@ const GenreButton = ({ genre, selectedGenre, onClick }) => {
   );
 };
 
-function App() {
+function Home() {
   const [selectedGenre, setSelectedGenre] = useState("");
   const navigate = useNavigate();
 
@@ -31,13 +35,32 @@ function App() {
     }
   };
 
+  const handleLogOut = async () => {
+    try {
+      if (window.confirm("Sure you want to Log out?")) {
+        await signOut(auth);
+      }
+    } catch (err) {
+      alert("Something went wrong!");
+    }
+  }
+
   const genres = ["Fiction", "Horror", "Love", "Suspense", "Drama", "Adventure"];
 
   return (
     <div className="app-container">
       <header className="app-header">
         <h1 className="app-title">Ebook Generator</h1>
-        <img src="./menubar.png" alt="Menu" className="menu-icon" />
+        <div style={{ display: "flex" }}>
+          {/* <img src="./menubar.png" alt="Menu" className="menu-icon" /> */}
+          <FontAwesomeIcon
+            title="Log Out"
+            icon={faSignOut}
+            size="2x"
+            style={{ marginLeft: "30px", cursor: "pointer" }}
+            onClick={handleLogOut}
+          />
+        </div>
       </header>
       <main>
         <h2>Which topic do you want to explore today?</h2>
@@ -67,4 +90,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;

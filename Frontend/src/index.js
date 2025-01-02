@@ -1,11 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { auth } from "./firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import "./index.css";
-import App from "./App";
+
+import Home from "./Home";
 import MyComponent from "./pages/genre_name";
 import Chapnos from "./pages/chap_no";
 import reportWebVitals from "./reportWebVitals";
@@ -14,6 +13,7 @@ import Output from "./pages/output";
 import Login from "./pages/login";
 import Signup from "./pages/signup";
 import Spinner from "./components/spinner";
+import "./index.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -41,7 +41,7 @@ const Index = () => {
     <BrowserRouter>
       {isLoggedIn ? (
         <Routes>
-          <Route exact path="/" element={<App />} />
+          <Route exact path="/" element={<Home />} />
           <Route exact path="/names" element={<MyComponent />} />
           <Route exact path="/chap" element={<Chapnos />} />
           <Route exact path="/content" element={<Content />} />
