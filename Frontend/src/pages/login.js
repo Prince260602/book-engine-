@@ -15,7 +15,6 @@ const Login = () => {
       try {
         await setPersistence(auth, browserLocalPersistence)
         await signInWithEmailAndPassword(auth, email, password)
-        navigate("/")
       }
       catch(err) {
         alert(err.message);
