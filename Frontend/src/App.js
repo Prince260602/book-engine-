@@ -1,6 +1,6 @@
 
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../src/firebase";
 
@@ -19,13 +19,6 @@ const GenreButton = ({ genre, selectedGenre, onClick }) => {
 function App() {
   const [selectedGenre, setSelectedGenre] = useState("");
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!auth.currentUser) {
-      alert("You are not logged in. Please login.");
-      navigate("/login");
-    }
-  }, [navigate]);
 
   const onSubmit = () => {
     if (!auth.currentUser) {

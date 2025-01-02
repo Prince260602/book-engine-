@@ -1,7 +1,9 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
+import { auth } from "./firebase";
+import { onAuthStateChanged } from "firebase/auth";
 import "./index.css";
 import App from "./App";
 import MyComponent from "./pages/genre_name";
@@ -11,22 +13,53 @@ import Content from "./pages/content";
 import Output from "./pages/output";
 import Login from "./pages/login";
 import Signup from "./pages/signup";
+import Spinner from "./components/spinner";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <BrowserRouter>
-    <Routes>
-      <Route exact path="/login" element={<Login />} />
-      <Route exact path="/signup" element={<Signup />} />
-      <Route exact path="/" element={<App />} />
-      <Route exact path="/names" element={<MyComponent />} />
-      <Route exact path="/chap" element={<Chapnos />} />
-      <Route exact path="/content" element={<Content />} />
-      <Route exact path="/output" element={<Output />} />
-      {/* // <Route path="*" element={<NoPage />} />  */}
-    </Routes>
-  </BrowserRouter>
-);
+
+
+const Index = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
+      setIsLoading(false);
+    })
+  }, []);
+
+  if (isLoading) {
+    return <Spinner />
+  }
+
+  return (
+    <BrowserRouter>
+      {isLoggedIn ? (
+        <Routes>
+          <Route exact path="/" element={<App />} />
+          <Route exact path="/names" element={<MyComponent />} />
+          <Route exact path="/chap" element={<Chapnos />} />
+          <Route exact path="/content" element={<Content />} />
+          <Route exact path="/output" element={<Output />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      ) : (
+        <Routes>
+          <Route exact path="/login" element={<Login />} />
+          <Route exact path="/signup" element={<Signup />} />
+          <Route path="*" element={<Navigate to="/login" />} />
+        </Routes>
+      )}
+    </BrowserRouter>
+  )
+}
+
+root.render(<Index />);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
