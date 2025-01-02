@@ -2,9 +2,49 @@ import * as React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faDownload } from '@fortawesome/free-solid-svg-icons'
+import { PDFDownloadLink, Document, Page, Text, StyleSheet, Font } from "@react-pdf/renderer";
 import Spinner from "../components/spinner";
 import databaseapi from "../api/databaseapi";
 import { auth } from "../firebase";
+
+Font.register({
+  family: "Open Sans",
+  fonts: [
+    {
+      src: "https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-regular.ttf",
+    },
+    {
+      src: "https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-300.ttf",
+      fontWeight: 100,
+    },
+  ],
+});
+
+const MyDoc = ({ contents, selectedIndex }) => {
+  const finalContents = contents[selectedIndex]
+    ?.map((data) => data.data)
+    .join("\n\n");
+  const styles = StyleSheet.create({
+    page: {
+      backgroundColor: "#ffffff",
+      padding: 30,
+      fontFamily: "Open Sans",
+      fontSize: 12,
+      fontWeight: 100,
+    },
+  });
+
+  return (
+    <Document>
+      <Page wrap size="A4" style={styles.page}>
+        <Text style={{ fontWeight: 1 }}>{finalContents}</Text>
+      </Page>
+    </Document>
+  );
+};
+
 function Output() {
   const [loading, setLoading] = useState(true);
   const [chapterList, setChapterList] = useState([]);
@@ -151,6 +191,25 @@ function Output() {
                 className="rightArrow"
                 onClick={() => setSidebarVisible(true)}
               />
+              <PDFDownloadLink
+                document={
+                  <MyDoc contents={contents} selectedIndex={selectedIndex} />
+                }
+                fileName="somename.pdf"
+              >
+                {({ loading }) =>
+                  loading ? (
+                    "Loading document..."
+                  ) : (
+                    <FontAwesomeIcon
+                      title="Download as a PDF"
+                      icon={faDownload}
+                      className="p-3"
+                      style={{ cursor: "pointer" }}
+                    />
+                  )
+                }
+              </PDFDownloadLink>
             </div>
             <div
               className="side-chapter-container"
