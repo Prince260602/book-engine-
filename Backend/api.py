@@ -18,7 +18,7 @@
 
 # origins = [
 #     # "http://localhost:3000", 
-#     "http://127.0.0.1:8000",  
+#     "https://book-engine-n2yu.onrender.com",  
 # ]
 
 # app.add_middleware(
@@ -107,7 +107,7 @@ app = FastAPI()
 
 origins = [
     # "http://localhost:3000", 
-    "http://127.0.0.1:8000",  
+    "https://book-engine-n2yu.onrender.com",  
 ]
 
 app.add_middleware(

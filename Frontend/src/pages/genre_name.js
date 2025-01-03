@@ -16,7 +16,7 @@ function MyComponent() {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://127.0.0.1:8000/get_genre_name/${genreName}`
+        `https://book-engine-n2yu.onrender.com/get_genre_name/${genreName}`
       );
       console.log("API response:", response.data);
 
