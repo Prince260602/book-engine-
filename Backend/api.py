@@ -107,7 +107,8 @@ app = FastAPI()
 
 origins = [
     # "http://localhost:3000", 
-    "https://book-engine-n2yu.onrender.com",  
+    "https://book-engine-n2yu.onrender.com",
+    "https://book-engine-omega.vercel.app",
 ]
 
 app.add_middleware(
